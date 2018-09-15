@@ -1,4 +1,4 @@
-package xyz.codemode.vocabularyselector.util;
+package xyz.codemode.util;
 
 import java.io.*;
 import java.util.Iterator;

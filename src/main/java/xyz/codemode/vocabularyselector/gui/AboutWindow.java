@@ -25,7 +25,8 @@ public class AboutWindow extends JDialog {
         title.setBounds(20,10,230,25);
         add(title);
 
-        JLabel version = new JLabel("v" + VocabularySelector.VERSION);
+        String versionNumber = getClass().getPackage().getImplementationVersion();  //works fine with JAR
+        JLabel version = new JLabel("v" + versionNumber);
         version.setFont(new Font("LetItBeDefault",Font.PLAIN,24));
         version.setBounds(105,40,100,25);
         add(version);
@@ -44,6 +45,5 @@ public class AboutWindow extends JDialog {
         ok.setBounds(100,150,75,25);
         ok.addActionListener(event -> dispose());
         add(ok);
-
     }
 }

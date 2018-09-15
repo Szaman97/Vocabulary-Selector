@@ -1,6 +1,6 @@
 package xyz.codemode.vocabularyselector.core;
 
-import xyz.codemode.vocabularyselector.util.FileUtility;
+import xyz.codemode.util.FileUtility;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONStringer;
@@ -115,7 +115,7 @@ public class Vocabulary {
     }
 
     private void loadVocabulary() {
-        InputStream vocabularyStream = Vocabulary.class.getResourceAsStream("/resources/vocabulary.txt");
+        InputStream vocabularyStream = Vocabulary.class.getResourceAsStream("/vocabulary.txt");
         vocabularyList = FileUtility.loadAsList(vocabularyStream,"UTF-8");
 
         try {

@@ -1,6 +1,6 @@
 package xyz.codemode.vocabularyselector.core;
 
-import xyz.codemode.vocabularyselector.util.FileUtility;
+import xyz.codemode.util.FileUtility;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONStringer;

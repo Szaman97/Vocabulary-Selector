@@ -1,6 +1,6 @@
 package xyz.codemode.vocabularyselector.core;
 
-import xyz.codemode.vocabularyselector.util.FileUtility;
+import xyz.codemode.util.FileUtility;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
@@ -73,7 +73,7 @@ public class CalendarModule {
     }
 
     private static void nullTime(Calendar c) {
-        c.set(Calendar.HOUR_OF_DAY, 2);
+        c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
         c.set(Calendar.SECOND, 0);
         c.set(Calendar.MILLISECOND, 0);

@@ -3,6 +3,7 @@ package xyz.codemode.vocabularyselector.gui.listeners;
 import xyz.codemode.vocabularyselector.core.Config;
 import xyz.codemode.vocabularyselector.core.VocabularySelector;
 
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.concurrent.ExecutorService;
@@ -35,10 +36,12 @@ public class MyWindowListener extends WindowAdapter {
                 if(condition) {
                     Config.setFontSize(fontSize);
                     Config.setFontColor(fontColor);
-                    Config.setWindowWidth(width);
-                    Config.setWindowHeight(height);
-                    Config.setWindowX(x);
-                    Config.setWindowY(y);
+                    if(state != Frame.MAXIMIZED_BOTH) {
+                        Config.setWindowWidth(width);
+                        Config.setWindowHeight(height);
+                        Config.setWindowX(x);
+                        Config.setWindowY(y);
+                    }
                     Config.setWindowState(state);
                     Config.saveConfig();
                 }

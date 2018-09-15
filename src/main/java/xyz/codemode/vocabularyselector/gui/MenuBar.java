@@ -1,6 +1,6 @@
 package xyz.codemode.vocabularyselector.gui;
 
-import xyz.codemode.vocabularyselector.gui.listeners.CloseAppListener;
+import xyz.codemode.vocabularyselector.core.VocabularySelector;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -35,7 +35,7 @@ public class MenuBar extends JMenuBar {
         JMenu help = createJMenu(menuTitles[1], KeyEvent.VK_H);
 
         file.add(createJMenuItem(fileMenuTitles[0],KeyEvent.VK_S,event -> new SettingsWindow()));
-        file.add(createJMenuItem(fileMenuTitles[1],KeyEvent.VK_X,new CloseAppListener()));
+        file.add(createJMenuItem(fileMenuTitles[1],KeyEvent.VK_X,event -> VocabularySelector.getWindow().getWindowListeners()[0].windowClosing(null)));
         help.add(createJMenuItem(helpMenuTitles[0],KeyEvent.VK_A,event -> new AboutWindow()));
 
         add(file);
