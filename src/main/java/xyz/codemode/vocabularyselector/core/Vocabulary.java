@@ -5,42 +5,48 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONStringer;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.swing.*;
+import java.io.*;
 import java.util.*;
 
 public class Vocabulary {
     public Vocabulary() {
-        lastDrawnVocabularyTXT = new File("./cfg/lastDrawnVocabulary.txt");
-        drawnJSON = new File("./cfg/drawn.json");
+        if(Config.getCustomVocabulary()) {
+            lastDrawnVocabularyTXT = new File("./cfg/lastDrawnVocabulary-custom.txt");
+            drawnJSON = new File("./cfg/drawn-custom.json");
+        } else {
+            setDefaultFiles();
+        }
+
+        loadFromFiles();
+    }
+
+    public void loadFromFiles() {
         loadVocabulary();
         loadDrawnArray();
         filterVocabulary();
     }
 
-    public String getAllVocabulary() {
-        StringBuilder sb = new StringBuilder();
-        for(String element : vocabularyList) {
-            sb.append(element);
-            sb.append('\n');
-        }
-
-        sb.deleteCharAt(sb.length()-1);
-        return sb.toString();
+    private void setDefaultFiles() {
+        lastDrawnVocabularyTXT = new File("./cfg/lastDrawnVocabulary.txt");
+        drawnJSON = new File("./cfg/drawn.json");
     }
 
-    public String getLastDrawnVocabulary() {
+    private String listToString(List<String> list) {
         StringBuilder sb = new StringBuilder();
-        for(String element : lastDrawnVocabulary) {
+        for(String element : list) {
             sb.append(element);
             sb.append('\n');
         }
+
         if(sb.length()>0)
             sb.deleteCharAt(sb.length()-1);
         return sb.toString();
     }
+
+    public String getAllVocabulary() { return listToString(vocabularyList); }
+
+    public String getLastDrawnVocabulary() { return listToString(lastDrawnVocabulary); }
 
     public String getAllDrawnVocabulary() {
         StringBuilder sb = new StringBuilder();
@@ -109,13 +115,30 @@ public class Vocabulary {
                 drawn[i] = array.getBoolean(i);
             }
         } catch (IOException e) {
-            drawn = new boolean[1024];
-            System.out.println("drawn.json not found");
+            drawn = new boolean[1024];  //TODO: add custom size
         }
     }
 
+    private void changeToDefault(String message, String title) {
+        Config.setCustomVocabulary(false);
+        Config.saveConfig();
+        setDefaultFiles();
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, message, title, JOptionPane.WARNING_MESSAGE));
+    }
+
     private void loadVocabulary() {
-        InputStream vocabularyStream = Vocabulary.class.getResourceAsStream("/vocabulary.txt");
+        InputStream vocabularyStream;
+        if(Config.getCustomVocabulary()) {
+            try {
+                vocabularyStream = new FileInputStream(Config.getVocabularyPath());
+            } catch (FileNotFoundException e) {
+                vocabularyStream = Vocabulary.class.getResourceAsStream("/vocabulary.txt");
+                changeToDefault("Custom file with vocabulary not found!\nLoading default one.", "File not found");
+            }
+        } else {
+            vocabularyStream = Vocabulary.class.getResourceAsStream("/vocabulary.txt");
+        }
+
         vocabularyList = FileUtility.loadAsList(vocabularyStream,"UTF-8");
 
         try {
@@ -128,10 +151,17 @@ public class Vocabulary {
     private void filterVocabulary() {
         indexesOfDrawableVocabulary = new LinkedList<>();
 
-        for(int i=0; i<vocabularyList.size(); i++) {
-            if(!drawn[i])
-                indexesOfDrawableVocabulary.add(i);
+        try {
+            for(int i=0; i<vocabularyList.size(); i++) {
+                if(!drawn[i])
+                    indexesOfDrawableVocabulary.add(i);
+            }
+        } catch (ArrayIndexOutOfBoundsException e) {
+            changeToDefault("File with vocabulary is incorrect\nor has more than 1024 lines", "Custom file error");
+            loadVocabulary();   //Load default vocabulary
+            loadDrawnArray();
         }
+
     }
 
     private File lastDrawnVocabularyTXT;

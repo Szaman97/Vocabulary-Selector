@@ -96,6 +96,7 @@ public class CalendarModule {
         }
     }
 
+    //TODO: Consider using 2 separate files for custom and default vocabulary
     private static File file = new File("./cfg/nextDrawDate.json");
     private static Calendar currentDate;
     private static Calendar nextDrawDate;

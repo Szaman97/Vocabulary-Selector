@@ -33,6 +33,8 @@ public class Config {
             windowX = object.getInt("WINDOW_X");
             windowY = object.getInt("WINDOW_Y");
             windowState = object.getInt("WINDOW_STATE");
+            customVocabulary = object.getBoolean("CUSTOM_VOCABULARY");
+            vocabularyPath = object.getString("VOCABULARY_PATH");
         } catch (IOException e) {
             //file not found; set default values; create new json file
             setDefault();
@@ -56,6 +58,8 @@ public class Config {
         windowX = 500;
         windowY = 300;
         windowState = 0;
+        customVocabulary = false;
+        vocabularyPath = "";
     }
 
     public static void saveConfig() {
@@ -83,6 +87,10 @@ public class Config {
         stringer.value(windowY);
         stringer.key("WINDOW_STATE");
         stringer.value(windowState);
+        stringer.key("CUSTOM_VOCABULARY");
+        stringer.value(customVocabulary);
+        stringer.key("VOCABULARY_PATH");
+        stringer.value(vocabularyPath);
         stringer.endObject();
         try {
             FileUtility.saveTextFile(configFile,stringer.toString());
@@ -102,6 +110,8 @@ public class Config {
     public static int getWindowState() { return windowState; }
     public static int getWindowX() { return windowX; }
     public static int getWindowY() { return windowY; }
+    public static boolean getCustomVocabulary() { return customVocabulary; }
+    public static String getVocabularyPath() { return vocabularyPath; }
 
     public static void setGeneratorInitValue(int arg) { generatorInitValue = arg; }
     public static void setWordsToDraw(int arg) { wordsToDraw = arg; }
@@ -114,6 +124,8 @@ public class Config {
     public static void setWindowState(int arg) { windowState = arg; }
     public static void setWindowX(int arg) { windowX = arg; }
     public static void setWindowY(int arg) { windowY = arg; }
+    public static void setCustomVocabulary(boolean arg) { customVocabulary = arg; }
+    public static void setVocabularyPath(String arg) { vocabularyPath = arg; }
 
     private static int generatorInitValue;
     private static int wordsToDraw;
@@ -126,4 +138,6 @@ public class Config {
     private static int windowX;
     private static int windowY;
     private static int windowState;
+    private static boolean customVocabulary;
+    private static String vocabularyPath;
 }

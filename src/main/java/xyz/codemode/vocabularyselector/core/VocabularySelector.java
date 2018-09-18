@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class VocabularySelector {
     public static void main(String... args) {
-        manager = new Manager();
+        Config.init();
 
         if(Config.getSystemUI()) {
             try {
@@ -15,6 +15,8 @@ public class VocabularySelector {
                 throw new RuntimeException(e);
             }
         }
+
+        manager = new Manager();
 
         SwingUtilities.invokeLater(() -> window = new Window());
 

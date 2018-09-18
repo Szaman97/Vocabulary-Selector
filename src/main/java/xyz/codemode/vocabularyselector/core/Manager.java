@@ -6,7 +6,6 @@ import java.util.concurrent.Executors;
 
 public class Manager {
     public Manager() {
-        Config.init();
         vocabulary = new Vocabulary();
         drawVocabularyWhenTimeIsRight();
     }
@@ -18,7 +17,7 @@ public class Manager {
         if(CalendarModule.canDrawVocabulary()) {
             CalendarModule.increaseNextDrawDate(Config.getDaysBetweenDraws());
             vocabulary.drawVocabulary(Config.getWordsToDraw(),Config.getGeneratorInitValue());
-            //TODO: status bar info; has to be synchronized - status bar does not exist in that moment
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "New vocabulary has been drawn", "New vocabulary", JOptionPane.INFORMATION_MESSAGE));
         }
     }
 
@@ -33,6 +32,17 @@ public class Manager {
             VocabularySelector.getWindow().getTabbedTextPanels().getLastDrawnPanel().setText(vocabulary.getLastDrawnVocabulary());
             VocabularySelector.getWindow().getTabbedTextPanels().getAllDrawnPanel().setText(vocabulary.getAllDrawnVocabulary());
             VocabularySelector.getWindow().getStatusBar().setText("Vocabulary loaded");
+        });
+    }
+
+    /**
+     * Reloads vocabulary from files in external thread, draws new set and displays it in window
+     */
+    public void reloadVocabularyFromFile() {
+        exec.submit(() -> {
+            vocabulary.loadFromFiles();
+            drawVocabularyUserRequested();
+            displayVocabulary();
         });
     }
 
